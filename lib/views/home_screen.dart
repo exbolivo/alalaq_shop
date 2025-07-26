@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
       height: 45,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: تنفيذ التنقل لاحقًا
+          _navigateToUnderConstructionPage(context);  // التوجيه إلى شاشة قيد التطوير عند الضغط على الزر
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFF0000),
@@ -75,6 +75,34 @@ class HomeScreen extends StatelessWidget {
             fontFamily: 'Tajawal',
             color: Colors.white,
           ),
+        ),
+      ),
+    );
+  }
+
+  // هذه الدالة تعرض صفحة تقول أن هذه الصفحة قيد التطوير
+  void _navigateToUnderConstructionPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UnderConstructionScreen(),
+      ),
+    );
+  }
+}
+
+class UnderConstructionScreen extends StatelessWidget {
+  const UnderConstructionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("قيد التطوير")),
+      body: const Center(
+        child: Text(
+          'هذه الخدمة قيد التطوير، سيتم تحديثها لاحقًا.',
+          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
         ),
       ),
     );

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,43 +22,28 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMessage = '';
     });
 
-    final url = Uri.parse('https://alalaqshop.com/wp-json/jwt-auth/v1/token');
+    final email = emailController.text.trim();
+    final password = passwordController.text;
 
-    try {
-      final response = await http.post(
-        url,
-        body: {
-          'username': emailController.text.trim(),
-          'password': passwordController.text,
-        },
+    // ✅ التحقق من بيانات الدخول الوهمية
+    if (email == 'demo@demo.com' && password == 'demo') {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userToken', 'dummyToken');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تم تسجيل الدخول بنجاح')),
       );
 
-      final data = json.decode(response.body);
-
-      if (response.statusCode == 200 && data['token'] != null) {
-        final token = data['token'];
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('userToken', token);
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم تسجيل الدخول بنجاح')),
-        );
-
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        setState(() {
-          _errorMessage = data['message'] ?? 'فشل تسجيل الدخول';
-        });
-      }
-    } catch (e) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
       setState(() {
-        _errorMessage = 'حدث خطأ أثناء الاتصال بالسيرفر';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
+        _errorMessage = 'بيانات الدخول غير صحيحة';
       });
     }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -71,102 +54,112 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFB1E2F3),
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.12),
-            Center(
-              child: SvgPicture.asset(
-                'assets/images/logoApp.svg',
-                width: screenWidth * 0.55,
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.15),
-            Expanded(
-              child: Column(
-                children: [
-                  buildTextField(
-                    controller: emailController,
-                    hint: 'البريد الإلكتروني',
-                    icon: 'assets/icons/iconEmail.svg',
-                    obscure: false,
+        child: SingleChildScrollView(
+          reverse: true,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).viewInsets.bottom,
+            child: Column(
+              children: [
+                SizedBox(height: screenHeight * 0.12),
+                Center(
+                  child: SvgPicture.asset(
+                    'assets/images/logoApp.svg',
+                    width: screenWidth * 0.55,
                   ),
-                  SizedBox(height: screenHeight * 0.02),
-                  buildTextField(
-                    controller: passwordController,
-                    hint: 'كلمة المرور',
-                    icon: 'assets/icons/iconLock.svg',
-                    obscure: _obscurePassword,
-                    toggleVisibility: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                    isPasswordField: true,
-                  ),
-                  if (_errorMessage.isNotEmpty) ...[
-                    const SizedBox(height: 10),
-                    Text(
-                      _errorMessage,
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontFamily: 'Tajawal',
+                ),
+                SizedBox(height: screenHeight * 0.15),
+                Expanded(
+                  child: Column(
+                    children: [
+                      buildTextField(
+                        controller: emailController,
+                        hint: 'البريد الإلكتروني',
+                        icon: 'assets/icons/iconEmail.svg',
+                        obscure: false,
                       ),
-                    ),
-                  ],
-                  const Spacer(),
-                  SizedBox(
-                    width: screenWidth * 0.7,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : loginUser,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF0000),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                      SizedBox(height: screenHeight * 0.02),
+                      buildTextField(
+                        controller: passwordController,
+                        hint: 'كلمة المرور',
+                        icon: 'assets/icons/iconLock.svg',
+                        obscure: _obscurePassword,
+                        toggleVisibility: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        isPasswordField: true,
                       ),
-                      child: _isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                        'تسجيل دخول',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Tajawal',
-                          color: Colors.white,
+                      if (_errorMessage.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        Text(
+                          _errorMessage,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontFamily: 'Tajawal',
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  GestureDetector(
-                    onTap: () {
-                      // TODO: الانتقال إلى شاشة إنشاء حساب
-                    },
-                    child: const Text.rich(
-                      TextSpan(
-                        text: 'زائر جديد؟ ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Tajawal',
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'إنشاء حساب',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                      ],
+                      const Spacer(),
+                      SizedBox(
+                        width: screenWidth * 0.7,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : loginUser,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF0000),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                        ],
+                          child: _isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text(
+                            'تسجيل دخول',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Tajawal',
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: screenHeight * 0.02),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/register');
+                        },
+                        child: const Text.rich(
+                          TextSpan(
+                            text: 'زائر جديد؟ ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Tajawal',
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'إنشاء حساب',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.04),
+                    ],
                   ),
-                  SizedBox(height: screenHeight * 0.04),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

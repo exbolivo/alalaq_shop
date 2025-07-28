@@ -30,11 +30,12 @@ class _LoginScreenState extends State<LoginScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('userToken', 'dummyToken');
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم تسجيل الدخول بنجاح')),
-      );
-
-      Navigator.pushReplacementNamed(context, '/home');
+      if (mounted) {  // التحقق من الـ BuildContext
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم تسجيل الدخول بنجاح')),
+        );
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } else {
       setState(() {
         _errorMessage = 'بيانات الدخول غير صحيحة';

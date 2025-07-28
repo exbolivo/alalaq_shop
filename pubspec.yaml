@@ -20,6 +20,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1   # ✅ توليد أيقونة التطبيق
+  flutter_native_splash: ^2.3.5     # ✅ شاشة البداية الاحترافية
 
 flutter:
   uses-material-design: true
@@ -36,3 +38,26 @@ flutter:
           weight: 400
         - asset: assets/fonts/Tajawal-Bold.ttf
           weight: 700
+
+# ✅ إعداد أيقونة التطبيق
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/iconApp.png"
+  remove_alpha_ios: true
+
+# ✅ إعداد splash screen الاحترافية
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  # تحديد اللون كخلفية
+  color: "#b1e2f3"  # لون خلفية شاشة البداية
+
+  # الشعار في المنتصف
+  image: assets/images/iconApp.png
+  android_gravity: fill  # لتمديد الخلفية بالكامل
+  ios_content_mode: scaleAspectFit  # لضبط الشعار بشكل مناسب
+
+  fullscreen: true

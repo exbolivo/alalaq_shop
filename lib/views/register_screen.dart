@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -55,9 +53,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // محاكاة تسجيل الحساب الناجح
     showMessage('تم إنشاء الحساب بنجاح');
 
-    // التوجيه إلى صفحة تسجيل الدخول
+    // التوجيه إلى صفحة تسجيل الدخول باستخدام delay
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pop(context); // أو استخدم pushNamed إذا عندك routes
+      if (mounted) { // التحقق إذا كان الـ widget مازال موجوداً
+        Navigator.pop(context); // أو استخدم pushNamed إذا عندك routes
+      }
     });
   }
 

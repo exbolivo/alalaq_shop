@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="الأفق Shop"
+        android:label="الألق Shop"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

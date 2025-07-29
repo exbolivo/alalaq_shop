@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>الأفق Shop</string>
+		<string>الألق Shop</string>
 		<!-- ✅ الاسم الذي يظهر على الشاشة -->
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>

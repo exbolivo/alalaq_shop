@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ✅ اللون المخصص لخلفية Splash Screen -->
+    <color name="splash_color">#b1e2f3</color>
+
+    <!-- ألوان أخرى (يمكن الإبقاء عليها أو تعديلها لاحقًا) -->
     <color name="launch_background_color">#b1e2f3</color>
+    <color name="ic_launcher_background">#b1e2f3</color>
 </resources>

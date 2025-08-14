@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@color/splash_color</item>
-        <item name="android:forceDarkAllowed">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-    </style>
-
-    <style name="NormalTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">?android:colorBackground</item>
+    <!-- ثيم إقلاع لأندرويد 12+ بدون أيقونة -->
+    <style name="LaunchThemeNoIcon" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">@color/splash_color</item>
+        <!-- لا نُعرّف أيقونة إطلاقًا -->
+        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>
 </resources>

@@ -5,30 +5,28 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: ">=3.8.1 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  cupertino_icons: any
-  flutter_svg: any
-  http: any
-  shared_preferences: any
+  cupertino_icons: ^1.0.6
+  flutter_svg: ^2.0.10+1
+  http: ^1.2.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: any
-  flutter_launcher_icons: any
-  flutter_native_splash: any
+  flutter_lints: ^3.0.2
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.1
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/images/
-    - assets/fonts/
     - assets/icons/
 
   fonts:
@@ -39,25 +37,43 @@ flutter:
         - asset: assets/fonts/Tajawal-Bold.ttf
           weight: 700
 
-# ✅ إعداد أيقونة التطبيق (باستخدام PNG شفافة)
+# -----------------------------
+# أيقونات التطبيق (Android + iOS)
+# -----------------------------
 flutter_launcher_icons:
-  android: true
+  android: true              # ← نولّد كل الأيقونات (القديمة + adaptive)
   ios: true
-  image_path: "assets/images/iconApp.png"
-  adaptive_icon_background: "#b1e2f3"
-  adaptive_icon_foreground: "assets/images/iconApp.png"
+
+  # صورة الأساس
+  image_path: assets/images/iconApp.png
+
+  # Android adaptive (ينتج ic_launcher.xml + ic_launcher_round.xml في mipmap-anydpi-v26)
+  image_path_android: assets/images/iconApp.png
+  adaptive_icon_background: "#B1E2F3"
+  adaptive_icon_foreground: assets/images/iconApp.png
+  min_sdk_android: 21
+
+  # iOS
+  image_path_ios: assets/images/iconApp.png
   remove_alpha_ios: true
 
-# ✅ إعداد Splash Screen (صورة PNG وسطية بدون تمدد)
+# -----------------------------
+# شاشة الإقلاع
+# -----------------------------
 flutter_native_splash:
   android: true
   ios: true
   web: false
 
-  color: "#b1e2f3"  # لون خلفية شاشة البداية
-
+  # للأجهزة < Android 12 و iOS
+  color: "#B1E2F3"
   image: assets/images/iconApp.png
-  android_gravity: center
-  ios_content_mode: scaleAspectFit
 
+  # لأجهزة Android 12+: لون فقط لمنع دائرة النظام
+  android_12:
+    color: "#B1E2F3"
+    image: null
+
+  android_gravity: center
+  ios_content_mode: center
   fullscreen: true

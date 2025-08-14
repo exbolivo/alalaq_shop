@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'login_screen.dart'; // ✅ تأكد أن المسار صحيح
+import '../helpers/navigator_helper.dart'; // ✅ استيراد ملف التنقل الموحد
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -11,23 +11,22 @@ class WelcomeScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFB1E2F3), // ✅ تم تعديل لون الخلفية هنا
+      backgroundColor: const Color(0xFFB1E2F3),
       body: SafeArea(
         child: Column(
           children: [
             SizedBox(height: screenHeight * 0.12),
 
-            // ✅ الشعار بالحجم الموحد مع صفحة تسجيل الدخول
+            // ✅ شعار التطبيق
             Center(
               child: SvgPicture.asset(
                 'assets/images/logoApp.svg',
-                width: screenWidth * 0.55, // ✅ نفس الحجم تمامًا
+                width: screenWidth * 0.55,
               ),
             ),
 
             const Spacer(),
 
-            // ✅ الزر + النص
             Column(
               children: [
                 SizedBox(
@@ -35,12 +34,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
+                      goToLogin(context); // ✅ التنقل باستخدام المساعد
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFF0000),
